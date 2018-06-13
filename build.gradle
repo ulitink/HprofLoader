@@ -1,0 +1,54 @@
+buildscript {
+    ext.kotlin_version = '1.2.41'
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.junit.platform:junit-platform-gradle-plugin:1.0.3"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+
+plugins {
+    id 'java'
+    id 'application'
+}
+
+apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'kotlin'
+
+mainClassName = 'io.github.ulitink.hprof.HprofParserKt'
+
+
+dependencies {
+    compile group: 'org.jetbrains', name: 'annotations', version: '15.0'
+
+    // https://mvnrepository.com/artifact/org.objenesis/objenesis
+    compile group: 'org.objenesis', name: 'objenesis', version: '2.6'
+
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.0.3")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.3")
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+}
+
+repositories {
+    jcenter()
+}
+
+description = 'Loads .hprof files back into JVM'
+version = '0.1'
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+run {
+    args = [System.getProperty("hprofFile", "")]
+}
